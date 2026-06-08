@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+/* Define custom theme variables for dark mode and extra styles */
+@theme {
+  --color-neutral-955: #050505;
+  --color-neutral-904: rgba(23, 23, 23, 0.4);
+}
+
+/* THEME CLEAN - LIGHT MODE OVERRIDES */
+.theme-clean {
+  --color-neutral-955: #f8fafc; /* Main layout background */
+  --color-neutral-950: #f1f5f9; /* Sidebar and list background */
+  --color-neutral-904: rgba(255, 255, 255, 0.4);
+  --color-neutral-900: #ffffff; /* Card backgrounds, modals */
+  --color-neutral-850: #f1f5f9; /* Inputs background */
+  --color-neutral-800: #e2e8f0; /* Soft borders */
+  --color-neutral-700: #cbd5e1; /* Visual dividers */
+  --color-neutral-600: #94a3b8; /* Muted explanations */
+  --color-neutral-550: #64748b; /* Secondary text */
+  --color-neutral-500: #475569; /* Regular body text */
+  --color-neutral-450: #334155; 
+  --color-neutral-400: #1e293b; /* Readable text links */
+  --color-neutral-300: #0f172a; /* Main headings */
+  --color-neutral-250: #0f172a; /* Titles */
+  --color-neutral-200: #020617; /* Contrasted bold texts */
+  --color-neutral-100: #000000;
+  
+  /* Thinner aesthetic for lines in clean mode */
+  --color-indigo-400: #4f46e5; /* Indigo is crisp on light */
+  --color-indigo-300: #3730a3;
+  --color-indigo-500: #4f46e5;
+  --color-amber-500: #d97706;  /* Soft text-amber-500 */
+  --color-amber-400: #b45309;
+  --color-emerald-500: #059669;
+}
+
+/* Transitional smoothing across standard themes */
+body, div, main, aside, header, section, p, h1, h2, h3, h4, h5, h6, span, button, input, textarea, select {
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              text-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ocultar barra de rolagem para elementos scroller-none */
+.scroller-none {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+.scroller-none::-webkit-scrollbar {
+  display: none !important;  /* Chrome, Safari and Opera */
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Barra de rolagem minimalista e transparente para .scrollbar-thin */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.15) transparent; /* Indigo transparente e elegante */
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.15);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.35);
+}
+
+/* Barra de rolagem sutil, transparente e integrada ao visual escuro para qualquer contêiner overflow */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.08); /* Cinza translúcido minimalista */
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.2); /* Destaque sutil ao passar o mouse */
+}
+
+/* Suporte generativo para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.08) transparent;
+}
+
+/* PREMIUM MINIMALIST ICON OVERRIDE - ALL CHANNELS & LEVELS */
+svg.lucide, .lucide {
+  stroke-width: 1.5px !important;
+  opacity: 0.92;
+  transition: opacity 0.2s ease, stroke-width 0.2s ease;
+}
+
+svg.lucide:hover, .lucide:hover {
+  opacity: 1;
+}
+
+
+

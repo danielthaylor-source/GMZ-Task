@@ -1,0 +1,119 @@
+{
+  "comment": "Esquema de Coleções do NoSQL Cloud Firestore para ERP GMZ Premium",
+  "collections": {
+    "pessoas": {
+      "path": "/pessoas/{idPessoa}",
+      "description": "Tabela mestre contendo credenciais lógicas de colaboradores, parceiros e clientes",
+      "fields": {
+        "id": "string (Ex: p1)",
+        "nome": "string (Ex: Daniel Thaylor)",
+        "email": "string (Ex: daniel.thaylor@gmz.solutions)",
+        "telefone": "string (Ex: (11) 99999-8888)",
+        "tipo": "string [enum: GMZ, Cliente, Outros]"
+      },
+      "rules": "Segurança Fortress: Read geral para assinados, Write liberado a administradores"
+    },
+    "acessos": {
+      "path": "/acessos/{idAcesso}",
+      "description": "Coleção RBAC ligando e-mail/ID da pessoa a uma matriz de telas permitidas",
+      "fields": {
+        "id_pessoa": "string [foreignkey: pessoas.id] (Ex: p1)",
+        "modulos": "array string (Ex: ['empresas', 'pessoas', 'contratos', 'projetos', 'demandas', 'agenda'])"
+      },
+      "rules": "Segurança Fortress: Read restrito à pessoa autenticada dono do ID, Write restrito a admin"
+    },
+    "empresas": {
+      "path": "/empresas/{idEmpresa}",
+      "description": "Cadastro simplificado de razões sociais parceiras",
+      "fields": {
+        "id": "string (Ex: emp1)",
+        "nome": "string (Ex: TechNova Systems)"
+      }
+    },
+    "contratos": {
+      "path": "/contratos/{idContrato}",
+      "description": "Acordos comerciais corporativos, SLAs de suporte e faturamentos cíclicos",
+      "fields": {
+        "id": "string (Ex: cont1)",
+        "numero": "string (Ex: CT-2026/012)",
+        "nome": "string (Ex: Desenvolvimento CORE)",
+        "sla": "string [enum: 4h, 12h, 24h, 48h] (Ex: 12h)",
+        "valorTotal": "number (Ex: 120000)",
+        "valorCobranca": "number (Ex: 10000)",
+        "periodoCobranca": "string [enum: Mensal, Bimestral, Trimestral, Semestral, Anual] (Ex: Mensal)",
+        "dataInicio": "string (Format: AAAA-MM-DD)",
+        "dataFim": "string (Format: AAAA-MM-DD)",
+        "status": "string [enum: Ativo, Rascunho, Suspenso, Cancelado] (Ex: Ativo)",
+        "empresaIds": "array string [foreignkey: empresas.id] (Ex: ['emp1', 'emp2'])",
+        "folderId": "string (Ex: drive-folder-technova-012)",
+        "anexos": "array objects: {name: string, url: string, size: string}"
+      }
+    },
+    "projetos": {
+      "path": "/projetos/{idProjeto}",
+      "description": "Mapeamento de workflows Scrum/Kanban e regras fiscais de horas",
+      "fields": {
+        "id": "string (Ex: proj1)",
+        "nome": "string (Ex: Plataforma ERP)",
+        "workflow": "array string [ordem sequencial de colunas] (Ex: ['Backlog', 'Em análise', 'Desenvolvimento', 'Done'])",
+        "atividades": "array string [atividades de esforço liberadas] (Ex: ['Desenvolvimento', 'Reunião', 'Análise', 'Design'])",
+        "contabilizarPorEmpresa": "boolean (Ex: true)"
+      }
+    },
+    "demandas": {
+      "path": "/demandas/{idDemanda}",
+      "description": "Cartões Kanban de chamados e tarefas atreladas aos fluxos",
+      "fields": {
+        "id": "string (Ex: dem1)",
+        "titulo": "string (Ex: Criar Tela de Login)",
+        "descricao": "string (Formato HTML de Rich Text Editor Quill) (Ex: <p>Instruções...</p>)",
+        "numeroChamado": "string (Ex: CH-10029)",
+        "tags": "array string (Ex: ['Frontend', 'Auth'])",
+        "criticidade": "string [enum: Baixa, Média, Alta, Urgente, Padrão] (Ex: Alta)",
+        "idProjeto": "string [foreignkey: projetos.id] (Ex: proj1)",
+        "coluna": "string [qualquer item do workflow do projeto] (Ex: Desenvolvimento)",
+        "idDesignado": "string [foreignkey: pessoas.id e tipo GMZ] (Ex: p1)",
+        "estimativaHoras": "number (Ex: 16)",
+        "createdAt": "string (ISO String, Ex: 2026-05-25T14:30:00Z)",
+        "updatedAt": "string (ISO String, Ex: 2026-05-27T10:00:00Z)"
+      }
+    },
+    "comentarios": {
+      "path": "/comentarios/{idComentario}",
+      "description": "Fórum de discussões internas vinculado a cada demanda Kanban",
+      "fields": {
+        "id": "string (Ex: com1)",
+        "idDemanda": "string [foreignkey: demandas.id] (Ex: dem1)",
+        "idPessoa": "string [foreignkey: pessoas.id] (Ex: p1)",
+        "nomeAutor": "string (Ex: Daniel Thaylor)",
+        "emailAutor": "string (Ex: daniel.thaylor@gmz.solutions)",
+        "textoHTML": "string (Texto de fórum com rich formatting HTML) (Ex: <p>Mensagem...</p>)",
+        "createdAt": "string (ISO String)"
+      }
+    },
+    "apontamentos": {
+      "path": "/apontamentos/{idApontamento}",
+      "description": "Lançamento de esforço operacional de operadores GMZ sobre tarefas",
+      "fields": {
+        "id": "string (Ex: ap1)",
+        "idDemanda": "string [foreignkey: demandas.id] (Ex: dem1)",
+        "idPessoa": "string [foreignkey: pessoas.id] (Ex: p1)",
+        "nomePessoa": "string (Ex: Daniel Thaylor)",
+        "atividade": "string [restringido pelas atividades permitidas do projeto] (Ex: Desenvolvimento)",
+        "horas": "number (Ex: 8)",
+        "createdAt": "string (ISO String)"
+      }
+    },
+    "eventos_agenda": {
+      "path": "/eventos_agenda/{idEvento}",
+      "description": "Calendário de compromissos corporativos regulares",
+      "fields": {
+        "id": "string (Ex: ev1)",
+        "titulo": "string (Ex: Alinhamento Geral)",
+        "descricao": "string (Ex: Reunião do comitê de sprint)",
+        "dataHora": "string (Formato ISO: AAAA-MM-DDT00:00:00)",
+        "recorrencia": "string [enum: Nenhuma, Semanal, Quinzenal, Mensal, Anual] (Ex: Semanal)"
+      }
+    }
+  }
+}

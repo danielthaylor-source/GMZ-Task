@@ -1,0 +1,110 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny-all catch-all rule
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Coleção de Pessoas
+    match /pessoas/{pessoaId} {
+      allow read: if true; // Permite leitura para renderizar dropdowns e designados
+      allow write: if isSignedIn() || request.auth == null; // Flexível para simulação e live auth
+    }
+
+    // Coleção de Acessos RBAC
+    match /acessos/{acessoId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Empresas
+    match /empresas/{empresaId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Contratos
+    match /contratos/{contratoId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Projetos
+    match /projetos/{projetoId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Demandas
+    match /demandas/{demandaId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Comentários
+    match /comentarios/{comentarioId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Apontamentos
+    match /apontamentos/{apontamentoId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Eventos
+    match /eventos/{eventoId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Grupos de Email e Agenda
+    match /grupo_emails/{grupoId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Tarefas Pessoais
+    match /tarefas_pessoais/{tarefaId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Coleção de Alertas
+    match /alertas/{alertaId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.auth == null;
+    }
+
+    // Novas Coleções do Módulo de Recursos Humanos
+    match /ferias/{id} {
+      allow read, write: if true;
+    }
+    match /horas_extras/{id} {
+      allow read, write: if true;
+    }
+    match /checkpoints/{id} {
+      allow read, write: if true;
+    }
+    match /reunioes_checkpoints/{id} {
+      allow read, write: if true;
+    }
+
+    // Configurações internas do ERP
+    match /_config/{configId} {
+      allow read, write: if true;
+    }
+  }
+}

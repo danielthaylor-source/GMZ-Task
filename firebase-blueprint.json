@@ -1,0 +1,304 @@
+{
+  "entities": {
+    "Pessoa": {
+      "title": "Pessoa",
+      "description": "Representa um usuário ou cliente associado ao ERP.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nome": { "type": "string" },
+        "email": { "type": "string" },
+        "telefone": { "type": "string" },
+        "tipo": { "type": "string", "enum": ["GMZ", "Cliente", "Outros"] }
+      },
+      "required": ["id", "nome", "email", "telefone", "tipo"]
+    },
+    "Acesso": {
+      "title": "Acesso",
+      "description": "Lista de módulos de acesso permitidos no RBAC para uma pessoa.",
+      "type": "object",
+      "properties": {
+        "id_pessoa": { "type": "string" },
+        "modulos": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id_pessoa", "modulos"]
+    },
+    "Empresa": {
+      "title": "Empresa",
+      "description": "Representa uma empresa cliente cadastrada no ERP.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nome": { "type": "string" }
+      },
+      "required": ["id", "nome"]
+    },
+    "Contrato": {
+      "title": "Contrato",
+      "description": "Contrato de serviço ou licenciamento com controle de faturamento, SLA e anexos.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "numero": { "type": "string" },
+        "nome": { "type": "string" },
+        "sla": { "type": "string" },
+        "valorTotal": { "type": "number" },
+        "valorCobranca": { "type": "number" },
+        "periodoCobranca": { "type": "string", "enum": ["Mensal", "Bimestral", "Trimestral", "Semestral", "Anual"] },
+        "dataInicio": { "type": "string" },
+        "dataFim": { "type": "string" },
+        "status": { "type": "string", "enum": ["Ativo", "Rascunho", "Suspenso", "Cancelado"] },
+        "empresaIds": { "type": "array", "items": { "type": "string" } },
+        "folderId": { "type": "string" },
+        "anexos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string" },
+              "size": { "type": "string" }
+            }
+          }
+        }
+      },
+      "required": ["id", "numero", "nome", "sla", "valorTotal", "valorCobranca", "periodoCobranca", "dataInicio", "dataFim", "status", "empresaIds"]
+    },
+    "Projeto": {
+      "title": "Projeto",
+      "description": "Projeto Kanban no qual as demandas e apontamentos ocorrem.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nome": { "type": "string" },
+        "workflow": { "type": "array", "items": { "type": "string" } },
+        "atividades": { "type": "array", "items": { "type": "string" } },
+        "contabilizarPorEmpresa": { "type": "boolean" },
+        "contratoIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "nome", "workflow", "atividades", "contabilizarPorEmpresa"]
+    },
+    "Demanda": {
+      "title": "Demanda",
+      "description": "Chamado Kanban de atividade associado a um projeto e designado a uma pessoa.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "titulo": { "type": "string" },
+        "descricao": { "type": "string" },
+        "numeroChamado": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "criticidade": { "type": "string", "enum": ["Baixa", "Média", "Alta", "Urgente", "Padrão"] },
+        "idProjeto": { "type": "string" },
+        "coluna": { "type": "string" },
+        "idDesignado": { "type": "string" },
+        "idDesignados": { "type": "array", "items": { "type": "string" } },
+        "estimativaHoras": { "type": "number" },
+        "atividade": { "type": "string" },
+        "tipo": { "type": "string" },
+        "excluido": { "type": "boolean" },
+        "excluidoAt": { "type": "string" },
+        "anexos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "nome": { "type": "string" },
+              "size": { "type": "string" },
+              "base64": { "type": "string" }
+            },
+            "required": ["id", "nome", "size", "base64"]
+          }
+        },
+        "estimativas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "horas": { "type": "number" },
+              "atividade": { "type": "string" }
+            },
+            "required": ["id", "horas", "atividade"]
+          }
+        },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "idEmpresa": { "type": "string" },
+        "idEmpresas": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "titulo", "numeroChamado", "criticidade", "idProjeto", "coluna", "idDesignado", "estimativaHoras", "createdAt", "updatedAt"]
+    },
+    "Comentario": {
+      "title": "Comentario",
+      "description": "Comentários descritivos por demanda no Kanban.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "idDemanda": { "type": "string" },
+        "idPessoa": { "type": "string" },
+        "nomeAutor": { "type": "string" },
+        "emailAutor": { "type": "string" },
+        "textoHTML": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "idDemanda", "idPessoa", "nomeAutor", "emailAutor", "textoHTML", "createdAt"]
+    },
+    "Apontamento": {
+      "title": "Apontamento",
+      "description": "Apontamento de horas gastas por demanda de projeto.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "idDemanda": { "type": "string" },
+        "idPessoa": { "type": "string" },
+        "nomePessoa": { "type": "string" },
+        "atividade": { "type": "string" },
+        "horas": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "idDemanda", "idPessoa", "nomePessoa", "atividade", "horas", "createdAt"]
+    },
+    "EventoAgenda": {
+      "title": "EventoAgenda",
+      "description": "Eventos de reuniões, alinhamentos e agenda corporativa recorrente.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "titulo": { "type": "string" },
+        "descricao": { "type": "string" },
+        "dataHora": { "type": "string" },
+        "recorrencia": { "type": "string", "enum": ["Anual", "Mensal", "Semanal", "Quinzenal", "Nenhuma"] },
+        "parentId": { "type": "string" }
+      },
+      "required": ["id", "titulo", "descricao", "dataHora", "recorrencia"]
+    },
+    "GrupoEmail": {
+      "title": "GrupoEmail",
+      "description": "Grupos de emails de alinhamento e participantes vinculados.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nome": { "type": "string" },
+        "descricao": { "type": "string" },
+        "participantesIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "nome", "participantesIds"]
+    },
+    "TarefaPessoal": {
+      "title": "TarefaPessoal",
+      "description": "Atividades operacionais pessoais de técnicos na fila de prioridades.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "idPessoa": { "type": "string" },
+        "titulo": { "type": "string" },
+        "descricao": { "type": "string" },
+        "dataInicio": { "type": "string" },
+        "dataFim": { "type": "string" },
+        "status": { "type": "string", "enum": ["Pendente", "Em Andamento", "Pausada", "Concluída"] },
+        "adicionarAgenda": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "idPessoa", "titulo", "dataInicio", "dataFim", "status", "adicionarAgenda"]
+    },
+    "Alerta": {
+      "title": "Alerta",
+      "description": "Representa alertas, notificações e avisos do sistema.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "titulo": { "type": "string" },
+        "mensagem": { "type": "string" },
+        "recipientId": { "type": "string" },
+        "type": { "type": "string" },
+        "data": { "type": "string" }
+      },
+      "required": ["id", "titulo", "mensagem", "recipientId", "data"]
+    },
+    "FeriasColaborador": {
+      "title": "FeriasColaborador",
+      "description": "Registro de direitos e gozos de férias dos colaboradores.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "idPessoa": { "type": "string" },
+        "periodoAquisitivoInicio": { "type": "string" },
+        "periodoAquisitivoFim": { "type": "string" },
+        "dataInicio": { "type": "string" },
+        "dataFim": { "type": "string" },
+        "status": { "type": "string" },
+        "observacao": { "type": "string" }
+      },
+      "required": ["id", "idPessoa", "periodoAquisitivoInicio", "periodoAquisitivoFim", "status"]
+    },
+    "HoraExtra": {
+      "title": "HoraExtra",
+      "description": "Banco de horas extras e compensações dos profissionais.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "idPessoa": { "type": "string" },
+        "idProjeto": { "type": "string" },
+        "idDemanda": { "type": "string" },
+        "horas": { "type": "number" },
+        "horasAjustadas": { "type": "number" },
+        "data": { "type": "string" },
+        "descricao": { "type": "string" },
+        "compensacao": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "idPessoa", "horas", "data", "status"]
+    },
+    "CheckPointItem": {
+      "title": "CheckPointItem",
+      "description": "Destaques profissionais positivos ou pontos de melhoria coletivos.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "idPessoa": { "type": "string" },
+        "tipo": { "type": "string" },
+        "descricao": { "type": "string" },
+        "data": { "type": "string" },
+        "autorId": { "type": "string" }
+      },
+      "required": ["id", "idPessoa", "tipo", "descricao", "data", "autorId"]
+    },
+    "ReuniaoCheckPoint": {
+      "title": "ReuniaoCheckPoint",
+      "description": "Fichas de reunião One-to-One e planos de ação registrados.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "titulo": { "type": "string" },
+        "dataReuniao": { "type": "string" },
+        "participantesIds": { "type": "array", "items": { "type": "string" } },
+        "checkpointsIds": { "type": "array", "items": { "type": "string" } },
+        "acoes": { "type": "string" },
+        "prazo": { "type": "string" },
+        "comentariosGerencia": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "titulo", "dataReuniao", "participantesIds", "createdAt"]
+    }
+  },
+  "firestore": {
+    "pessoas": { "schema": "Pessoa", "description": "Coleção de perfis de pessoas e acessos do ERP." },
+    "acessos": { "schema": "Acesso", "description": "Coleção de permissões RBAC por ID de pessoa." },
+    "empresas": { "schema": "Empresa", "description": "Empresas clientes vinculadas aos contratos." },
+    "contratos": { "schema": "Contrato", "description": "Contratos cadastrados de clientes e SLAs." },
+    "projetos": { "schema": "Projeto", "description": "Projetos Kanban de desenvolvimento ou suporte." },
+    "demandas": { "schema": "Demanda", "description": "Demandas alocadas nas colunas do quadro Kanban." },
+    "comentarios": { "schema": "Comentario", "description": "Lista de mensagens e interações nas demandas." },
+    "apontamentos": { "schema": "Apontamento", "description": "Logs de apontamento de horas para as demandas." },
+    "eventos": { "schema": "EventoAgenda", "description": "Organizador de reuniões e lembretes recorrentes." },
+    "grupo_emails": { "schema": "GrupoEmail", "description": "Lista de grupos de email e pessoas cadastradas." },
+    "tarefas_pessoais": { "schema": "TarefaPessoal", "description": "Fila de afazeres/atividades individuais." },
+    "alertas": { "schema": "Alerta", "description": "Coleção de alertas e avisos gerados pelo ERP." },
+    "ferias": { "schema": "FeriasColaborador", "description": "Direitos e gozos de férias dos colaboradores." },
+    "horas_extras": { "schema": "HoraExtra", "description": "Banco de horas extras e compensações solicitadas." },
+    "checkpoints": { "schema": "CheckPointItem", "description": "Observações do gestor e profissional." },
+    "reunioes_checkpoints": { "schema": "ReuniaoCheckPoint", "description": "Fichas de One-to-One e planos de ação associados." }
+  }
+}

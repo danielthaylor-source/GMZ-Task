@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Remix: ERP Gestão de Contratos e Demandas",
+  "description": "Sistema ERP Premium para gestão integrada de contratos, pessoas, empresas, projetos, demandas via Kanban e agenda centralizada com suporte a recorrências.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
